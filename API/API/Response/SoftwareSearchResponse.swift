@@ -6,53 +6,53 @@
 //
 
 public struct SoftwareSearchResponse: Decodable {
-    let resultCount: Int?
-    let results: [SoftwareSearchResults]?
+    public let resultCount: Int?
+    public let results: [SoftwareSearchResults]?
 }
 
 public struct SoftwareSearchResults: Decodable {
-    let artworkUrl512: String?
-    let artworkUrl100: String?
-    let artworkUrl60: String?
-    let artistViewUrl: String?
-    let screenshotUrls: [String]?
-    let ipadScreenshotUrls: [String]?
-    let appletvScreenshotUrls: [String]?
-    let isGameCenterEnabled: Bool?
-    let supportedDevices: [String]?
-    let features: [String]?
-    let advisories: [String]?
-    let kind: String?
-    let trackCensoredName: String?
-    let languageCodesISO2A: [String]?
-    let fileSizeBytes: String?
-    let sellerUrl: String?
-    let formattedPrice: String?
-    let contentAdvisoryRating: String?
-    let averageUserRatingForCurrentVersion: Double?
-    let userRatingCountForCurrentVersion: Int?
-    let averageUserRating: Double?
-    let trackViewUrl: String?
-    let trackContentRating: String?
-    let minimumOsVersion: String?
-    let currentVersionReleaseDate: String?
-    let releaseNotes: String?
-    let artistId: Int?
-    let artistName: String?
-    let genres: [String]?
-    let price: Double?
-    let description: String?
-    let isVppDeviceBasedLicensingEnabled: Bool?
-    let bundleId: String?
-    let trackId: Int?
-    let trackName: String?
-    let releaseDate: String?
-    let primaryGenreName: String?
-    let primaryGenreId: Int?
-    let genreIds: [String]?
-    let sellerName: String?
-    let currency: String?
-    let version: String?
-    let wrapperType: String?
-    let userRatingCount: Int?
+    public let artworkUrl512: String?
+    public let artworkUrl100: String?
+    public let artworkUrl60: String?
+    public let artistViewUrl: String?
+    public let screenshotUrls: [String]?
+    public let ipadScreenshotUrls: [String]?
+    public let appletvScreenshotUrls: [String]?
+    public let isGameCenterEnabled: Bool?
+    public let supportedDevices: [String]?
+    public let features: [String]?
+    public let advisories: [String]?
+    public let kind: String?
+    public let trackCensoredName: String?
+    public let languageCodesISO2A: [String]?
+    public let fileSizeBytes: String?
+    public let sellerUrl: String?
+    public let formattedPrice: String?
+    public let contentAdvisoryRating: String?
+    public let averageUserRatingForCurrentVersion: Double?
+    public let userRatingCountForCurrentVersion: Int?
+    public let averageUserRating: Double?
+    public let trackViewUrl: String?
+    public let trackContentRating: String?
+    public let minimumOsVersion: String?
+    public let currentVersionReleaseDate: String?
+    public let releaseNotes: String?
+    public let artistId: Int?
+    public let artistName: String?
+    public let genres: [String]?
+    public let price: Double?
+    public let description: String?
+    public let isVppDeviceBasedLicensingEnabled: Bool?
+    public let bundleId: String?
+    public let trackId: Int?
+    public let trackName: String?
+    public let releaseDate: String?
+    public let primaryGenreName: String?
+    public let primaryGenreId: Int?
+    public let genreIds: [String]?
+    public let sellerName: String?
+    public let currency: String?
+    public let version: String?
+    public let wrapperType: String?
+    public let userRatingCount: Int?
 }

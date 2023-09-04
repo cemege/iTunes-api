@@ -6,20 +6,23 @@
 //
 
 import SwiftUI
-import API
-import Combine
 
 struct ContentView: View {
     
+    // MARK: - Properties
     @StateObject var viewModel: ContentViewModel
-    
+        
+    // MARK: - Body
     var body: some View {
-        VStack {
-            Text("Hello, world!")
-        }
-        .padding()
-        .onAppear {
-            viewModel.getSearchResponse()
+        NavigationStack {
+            VStack {
+                Divider()
+                Text("Hello, world!")
+                
+            }
+            .searchable(text: $viewModel.searchTerm)
+            .padding()
+            .navigationTitle("Screenshots")
         }
     }
 }
@@ -29,3 +32,5 @@ struct ContentView_Previews: PreviewProvider {
         ContentView(viewModel: .init(router: .init()))
     }
 }
+
+// (0-100kb, 100-250kb, 250-500kb, 500+kb) 4 sections in a List
