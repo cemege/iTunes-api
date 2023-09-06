@@ -13,9 +13,6 @@ protocol ContentViewRoute {
 
 extension ContentViewRoute where Self: Router {
     func presentContentView() -> ContentView {
-        let router = ContentViewRouter()
-        let viewModel = ContentViewModel(router: router)
-        viewModel.service = SearchService()
         return ContentView(viewModel: .init(router: .init()))
     }
 }

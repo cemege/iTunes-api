@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BBA7599B2AA798D100EDB61E /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA7599A2AA798D100EDB61E /* ImageLoader.swift */; };
+		BBA7599E2AA7A93200EDB61E /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA7599D2AA7A93200EDB61E /* ArrayExtension.swift */; };
+		BBA759A02AA7B53300EDB61E /* ImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA7599F2AA7B53300EDB61E /* ImageExtension.swift */; };
+		BBA759A22AA7B9EE00EDB61E /* UIScreenExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA759A12AA7B9EE00EDB61E /* UIScreenExtension.swift */; };
 		BBBA183D2AA63DA3001F18F6 /* itunes_apiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBBA183C2AA63DA3001F18F6 /* itunes_apiApp.swift */; };
 		BBBA183F2AA63DA3001F18F6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBBA183E2AA63DA3001F18F6 /* ContentView.swift */; };
 		BBBA18412AA63DA4001F18F6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBBA18402AA63DA4001F18F6 /* Assets.xcassets */; };
@@ -35,6 +39,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BBA7599A2AA798D100EDB61E /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		BBA7599D2AA7A93200EDB61E /* ArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
+		BBA7599F2AA7B53300EDB61E /* ImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExtension.swift; sourceTree = "<group>"; };
+		BBA759A12AA7B9EE00EDB61E /* UIScreenExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScreenExtension.swift; sourceTree = "<group>"; };
 		BBBA18392AA63DA3001F18F6 /* itunes-api.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "itunes-api.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBBA183C2AA63DA3001F18F6 /* itunes_apiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = itunes_apiApp.swift; sourceTree = "<group>"; };
 		BBBA183E2AA63DA3001F18F6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -60,6 +68,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BBA759992AA798BA00EDB61E /* Content */ = {
+			isa = PBXGroup;
+			children = (
+				BBBA183E2AA63DA3001F18F6 /* ContentView.swift */,
+				BBF09FDA2AA6471B00E60AAA /* ContentViewModel.swift */,
+				BBF09FE22AA6485300E60AAA /* ContentViewRouter.swift */,
+				BBF09FE42AA6496C00E60AAA /* ContentViewRoute.swift */,
+			);
+			path = Content;
+			sourceTree = "<group>";
+		};
+		BBA7599C2AA7A92700EDB61E /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				BBA7599D2AA7A93200EDB61E /* ArrayExtension.swift */,
+				BBA7599F2AA7B53300EDB61E /* ImageExtension.swift */,
+				BBA759A12AA7B9EE00EDB61E /* UIScreenExtension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		BBBA18302AA63DA3001F18F6 = {
 			isa = PBXGroup;
 			children = (
@@ -83,11 +112,8 @@
 				BBBA183C2AA63DA3001F18F6 /* itunes_apiApp.swift */,
 				BBF09FDC2AA6474300E60AAA /* Base */,
 				BBF09FDD2AA6474600E60AAA /* Utils */,
+				BBA7599C2AA7A92700EDB61E /* Extensions */,
 				BBF09FD92AA6452100E60AAA /* Scenes */,
-				BBBA183E2AA63DA3001F18F6 /* ContentView.swift */,
-				BBF09FDA2AA6471B00E60AAA /* ContentViewModel.swift */,
-				BBF09FE22AA6485300E60AAA /* ContentViewRouter.swift */,
-				BBF09FE42AA6496C00E60AAA /* ContentViewRoute.swift */,
 				BBBA18402AA63DA4001F18F6 /* Assets.xcassets */,
 				BBBA18422AA63DA4001F18F6 /* Preview Content */,
 			);
@@ -113,6 +139,7 @@
 		BBF09FD92AA6452100E60AAA /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				BBA759992AA798BA00EDB61E /* Content */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -129,6 +156,7 @@
 			isa = PBXGroup;
 			children = (
 				BBF09FE02AA6478000E60AAA /* Router.swift */,
+				BBA7599A2AA798D100EDB61E /* ImageLoader.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -206,10 +234,14 @@
 			files = (
 				BBBA183F2AA63DA3001F18F6 /* ContentView.swift in Sources */,
 				BBF09FE32AA6485300E60AAA /* ContentViewRouter.swift in Sources */,
+				BBA759A22AA7B9EE00EDB61E /* UIScreenExtension.swift in Sources */,
 				BBF09FDF2AA6475400E60AAA /* BaseViewModel.swift in Sources */,
+				BBA759A02AA7B53300EDB61E /* ImageExtension.swift in Sources */,
+				BBA7599E2AA7A93200EDB61E /* ArrayExtension.swift in Sources */,
 				BBF09FE52AA6496C00E60AAA /* ContentViewRoute.swift in Sources */,
 				BBF09FE12AA6478000E60AAA /* Router.swift in Sources */,
 				BBBA183D2AA63DA3001F18F6 /* itunes_apiApp.swift in Sources */,
+				BBA7599B2AA798D100EDB61E /* ImageLoader.swift in Sources */,
 				BBF09FDB2AA6471B00E60AAA /* ContentViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

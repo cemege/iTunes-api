@@ -17,8 +17,19 @@ struct ContentView: View {
         NavigationStack {
             VStack {
                 Divider()
-                Text("Hello, world!")
-                
+                 
+                ScrollView {
+                    LazyVStack(alignment: .leading, spacing: 8) {
+                        ForEach(viewModel.imageData, id: \.self) { data in
+                            Image(data: data)
+                                .resizable()
+                                .aspectRatio(1, contentMode: .fit)
+                                .frame(width: (UIScreen.width - 32) / 2)
+                                .frame(height: (UIScreen.width - 32) / 2)
+                        }
+                    }
+                    .padding(16)
+                }
             }
             .searchable(text: $viewModel.searchTerm)
             .padding()
