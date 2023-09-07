@@ -11,27 +11,114 @@ struct ContentView: View {
     
     // MARK: - Properties
     @StateObject var viewModel: ContentViewModel
-        
+    
+    @State var contentMode = ContentMode.fit
+    @FocusState var isInputActive: Bool
+    
     // MARK: - Body
     var body: some View {
         NavigationStack {
             VStack {
-                Divider()
-                 
-                ScrollView {
-                    LazyVStack(alignment: .leading, spacing: 8) {
-                        ForEach(viewModel.imageData, id: \.self) { data in
-                            Image(data: data)
-                                .resizable()
-                                .aspectRatio(1, contentMode: .fit)
-                                .frame(width: (UIScreen.width - 32) / 2)
-                                .frame(height: (UIScreen.width - 32) / 2)
+                if viewModel.lowSizeImageData.isEmpty, viewModel.midSizeImageData.isEmpty, viewModel.highSizeImageData.isEmpty, viewModel.giganticSizeImageData.isEmpty {
+                    VStack(alignment: .center) {
+                        Text("Start search for some screenshots :)")
+                            .font(.largeTitle)
+                    }
+                    
+                } else {
+                    ScrollView {
+                        Divider()
+                        
+                        VStack(alignment: .center, spacing: 8) {
+                            Text("LOW")
+                                .font(.largeTitle)
+                            
+                            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]) {
+                                ForEach(viewModel.lowSizeImageData) { data in
+                                    Image(data: data.imageData ?? Data())
+                                        .aspectRatio(contentMode: contentMode)
+                                        .font(.system(size: 30))
+                                        .frame(width: UIScreen.width / 3 - 52, height: UIScreen.width / 3 - 52)
+                                        .cornerRadius(8)
+                                        .overlay {
+                                            RoundedRectangle(cornerRadius: 8)
+                                                .stroke(Color.gray, lineWidth: 1)
+                                        }
+                                }
+                            }
+                            .padding(16)
+                        }
+                        
+                        Divider()
+                        
+                        VStack(alignment: .center, spacing: 8) {
+                            Text("MID")
+                                .font(.largeTitle)
+                            
+                            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]) {
+                                ForEach(viewModel.midSizeImageData) { data in
+                                    Image(data: data.imageData ?? Data())
+                                        .aspectRatio(contentMode: contentMode)
+                                        .font(.system(size: 30))
+                                        .frame(width: UIScreen.width / 3 - 52, height: UIScreen.width / 3 - 52)
+                                        .cornerRadius(8)
+                                        .overlay {
+                                            RoundedRectangle(cornerRadius: 8)
+                                                .stroke(Color.gray, lineWidth: 1)
+                                        }
+                                }
+                            }
+                            .padding(16)
+                        }
+                        
+                        Divider()
+                        
+                        VStack(alignment: .center, spacing: 8) {
+                            Text("HIGH")
+                                .font(.largeTitle)
+                            
+                            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]) {
+                                ForEach(viewModel.highSizeImageData) { data in
+                                    Image(data: data.imageData ?? Data())
+                                        .aspectRatio(contentMode: contentMode)
+                                        .font(.system(size: 30))
+                                        .frame(width: UIScreen.width / 3 - 52, height: UIScreen.width / 3 - 52)
+                                        .cornerRadius(8)
+                                        .overlay {
+                                            RoundedRectangle(cornerRadius: 8)
+                                                .stroke(Color.gray, lineWidth: 1)
+                                        }
+                                }
+                            }
+                            .padding(16)
+                        }
+                        
+                        Divider()
+                        
+                        VStack(alignment: .center, spacing: 8) {
+                            Text("GIGANTIC")
+                                .font(.largeTitle)
+                            
+                            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]) {
+                                ForEach(viewModel.giganticSizeImageData) { data in
+                                    Image(data: data.imageData ?? Data())
+                                        .aspectRatio(contentMode: contentMode)
+                                        .font(.system(size: 30))
+                                        .frame(width: UIScreen.width / 3 - 52, height: UIScreen.width / 3 - 52)
+                                        .cornerRadius(8)
+                                        .overlay {
+                                            RoundedRectangle(cornerRadius: 8)
+                                                .stroke(Color.gray, lineWidth: 1)
+                                        }
+                                }
+                            }
+                            .padding(16)
                         }
                     }
-                    .padding(16)
                 }
             }
             .searchable(text: $viewModel.searchTerm)
+            .autocorrectionDisabled()
             .padding()
             .navigationTitle("Screenshots")
         }
@@ -43,5 +130,3 @@ struct ContentView_Previews: PreviewProvider {
         ContentView(viewModel: .init(router: .init()))
     }
 }
-
-// (0-100kb, 100-250kb, 250-500kb, 500+kb) 4 sections in a List

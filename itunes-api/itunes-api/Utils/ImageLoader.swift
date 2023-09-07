@@ -13,11 +13,11 @@ enum ImageLoaderError: Error {
     case notFound
 }
 
-class ImageLoader: ObservableObject {
+final class ImageLoader: ObservableObject {
     
     // MARK: - Properties
     @Published var error: Bool = false
-    @Published var imageData: [Data] = []
+    @Published var imageData: [ContentViewModel.IdentifiableImageData] = []
     
     func getImageData(url: URL?) async throws -> Data {
         guard let url else { throw ImageLoaderError.notFound }
@@ -37,7 +37,11 @@ class ImageLoader: ObservableObject {
             async let secondImageData = getImageData(url: secondURL)
             async let thirdImageData = getImageData(url: thirdURL)
             
-            imageData = try await [firsImageData, secondImageData, thirdImageData]
+            imageData = try await [
+                ContentViewModel.IdentifiableImageData(imageData: firsImageData),
+                ContentViewModel.IdentifiableImageData(imageData: secondImageData),
+                ContentViewModel.IdentifiableImageData(imageData: thirdImageData)
+            ]
         }
     }
 }
