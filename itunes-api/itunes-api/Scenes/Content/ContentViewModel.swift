@@ -13,23 +13,21 @@ final class ContentViewModel: BaseViewModel<ContentViewRouter> {
     
     // MARK: - Properties
     private var response: SoftwareSearchResponse?
+    private let maxAsyncTaskCount: Int = 3
     
     var service: SearchServiceProtocol = SearchService()
     var cancellables = Set<AnyCancellable>()
     
-    var firstImageURL: URL?
-    var secondImageURL: URL?
-    var thirdImageURL: URL?
-    
     @Published var searchTerm: String = ""
     @Published var screenshotUrls: [String] = []
+    @Published var maxAsyncTaskItems: Array<[String]> = []
     @Published var imageLoader = ImageLoader()
-    @Published var fetchImageTask: Task<Void, Never>?
+    @Published var fetchImageTask: Task<Void, Error>?
     
-    @Published var lowSizeImageData: [IdentifiableImageData] = []
-    @Published var midSizeImageData: [IdentifiableImageData] = []
-    @Published var highSizeImageData: [IdentifiableImageData] = []
-    @Published var giganticSizeImageData: [IdentifiableImageData] = []
+    @Published var lowSizeImageData: [IdentifiableDataSourceModel] = []
+    @Published var midSizeImageData: [IdentifiableDataSourceModel] = []
+    @Published var highSizeImageData: [IdentifiableDataSourceModel] = []
+    @Published var giganticSizeImageData: [IdentifiableDataSourceModel] = []
     
     override init(router: ContentViewRouter) {
         super.init(router: router)
@@ -83,41 +81,75 @@ private extension ContentViewModel {
     private func sinkScreenshotUrls() {
         $screenshotUrls
             .sink { screenshotUrls in
-                var index = 0
                 
-                for _ in screenshotUrls {
+                guard !self.searchTerm.isEmpty else {
+                    self.emptyAllData()
+                    return
+                }
+                
+                let screenshotUrlSet = Set<String>(screenshotUrls)
+                
+                for item in stride(from: 0, to: screenshotUrlSet.count, by: self.maxAsyncTaskCount) {
                     guard !self.searchTerm.isEmpty else {
+                        self.emptyAllData()
                         break
                     }
                     
-                    guard let firstURL = URL(string: screenshotUrls[safe: index] ?? ""),
-                          let secondURL = URL(string: screenshotUrls[safe: index + 1] ?? ""),
-                          let thirdURL = URL(string: screenshotUrls[safe: index + 2] ?? "")
-                    else {  return }
+                    let endIndex = min(item + self.maxAsyncTaskCount, screenshotUrls.count)
+                    let subArray = Array(screenshotUrls[item..<endIndex])
+                    self.maxAsyncTaskItems.append(subArray)
                     
-                    self.fetchImageTask = Task {
-                        guard !self.searchTerm.isEmpty else {
-                            self.emptyAllData()
-                            return
-                        }
-                        
-                        debugPrint("Download started \(self.searchTerm)")
-                        await self.imageLoader.downloadImages(firstURL: firstURL, secondURL: secondURL, thirdURL: thirdURL)
-                        debugPrint("Download ended \(self.searchTerm)")
-                        
-                        //TODO: Downloaded images must be added to cache
-                    }
                     
-                    index += 3
+//                    var index = 0
+//                    guard let firstURL = URL(string: screenshotUrls[safe: index] ?? ""),
+//                          let secondURL = URL(string: screenshotUrls[safe: index + 1] ?? ""),
+//                          let thirdURL = URL(string: screenshotUrls[safe: index + 2] ?? "")
+//                    else {  return }
+//
+//                    self.fetchImageTask = Task {
+//                        guard !self.searchTerm.isEmpty else {
+//                            self.emptyAllData()
+//                            return
+//                        }
+//
+//                        debugPrint("Download started \(self.searchTerm)")
+//                        await self.imageLoader.downloadImages(firstURL: firstURL, secondURL: secondURL, thirdURL: thirdURL)
+//                        debugPrint("Download ended \(self.searchTerm)")
+//
+//                        //TODO: Downloaded images must be added to cache
+//                    }
+//
+//                    index += 3
                 }
+                
+                self.sinkMaxAsyncTaskItems()
             }
             .store(in: &cancellables)
     }
     
+    private func sinkMaxAsyncTaskItems() {
+        guard !self.searchTerm.isEmpty else {
+            self.emptyAllData()
+            return
+        }
+        
+        for urls in maxAsyncTaskItems {
+            guard !self.searchTerm.isEmpty else {
+                self.emptyAllData()
+                break
+            }
+            
+            self.fetchImageTask = Task {
+                try await self.imageLoader.downloadImagesWithTaskGroup(urls: urls)
+//                await self.imageLoader.downloadImagesStatically(firstURL: urls[safe: 0], secondURL: urls[safe: 1], thirdURL: urls[safe: 2])
+            }
+        }
+    }
+    
     private func sinkImageLoaderDataList() {
         imageLoader.$imageDataList
-            .sink { dataModel in
-                dataModel.forEach { data in
+            .sink { dataList in
+                for data in dataList {
                     guard !self.searchTerm.isEmpty else {
                         self.emptyAllData()
                         return
@@ -130,15 +162,6 @@ private extension ContentViewModel {
     }
 }
 
-// MARK: - Identifiable Model Helper
-extension ContentViewModel {
-    struct IdentifiableImageData: Identifiable, Hashable {
-        let id: String = UUID().uuidString
-        var imageData: Data?
-        var url: URL?
-    }
-}
-
 // MARK: - Data Source Helper
 private extension ContentViewModel {
     private func getScreenshotsUrls() -> [String] {
@@ -146,7 +169,7 @@ private extension ContentViewModel {
         return results.compactMap({ $0.screenshotUrls }).flatMap({ $0 })
     }
     
-    private func configureImageDataBySize(data: IdentifiableImageData) {
+    private func configureImageDataBySize(data: IdentifiableDataSourceModel) {
         guard let sizeInBytes = data.imageData?.count else { return }
         
         let imageDataSizeInKB = sizeInBytes / 1024
@@ -173,5 +196,14 @@ private extension ContentViewModel {
         midSizeImageData = []
         highSizeImageData = []
         giganticSizeImageData = []
+    }
+}
+
+// MARK: - Identifiable Model Helper
+extension ContentViewModel {
+    struct IdentifiableDataSourceModel: Identifiable, Hashable {
+        let id: UUID = UUID()
+        var imageData: Data?
+        var url: URL?
     }
 }

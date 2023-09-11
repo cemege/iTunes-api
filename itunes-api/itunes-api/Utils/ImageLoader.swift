@@ -17,10 +17,11 @@ final class ImageLoader: ObservableObject {
     
     // MARK: - Properties
     @Published var error: Bool = false
-    @Published var imageDataList: [ContentViewModel.IdentifiableImageData] = []
+    @Published var imageDataList: [ContentViewModel.IdentifiableDataSourceModel] = []
     
-    func getImageData(url: URL?) async throws -> Data {
-        guard let url else {
+    // MARK: - Download Image
+    func getImageData(urlString: String?) async throws -> ContentViewModel.IdentifiableDataSourceModel {
+        guard let url = URL(string: urlString ?? "") else {
             throw ImageLoaderError.notFound
         }
         
@@ -29,21 +30,34 @@ final class ImageLoader: ObservableObject {
             throw ImageLoaderError.serverError
         }
         
-        return data
+        debugPrint("-------------------------Download ENDED-------------------------")
+        return ContentViewModel.IdentifiableDataSourceModel(imageData: data, url: url)
+    }
+    
+    // MARK: - Tasks
+    @MainActor
+    func downloadImagesWithTaskGroup(urls: [String]) async throws {
+        try await withThrowingTaskGroup(of: ContentViewModel.IdentifiableDataSourceModel.self) { group in
+            for url in urls {
+                debugPrint("-------------------------TASK START-------------------------")
+                group.addTask { try await self.getImageData(urlString: url) }
+            }
+            
+            debugPrint("-------------------------TASK DONE-------------------------")
+            for try await item in group {
+                imageDataList.append(item)
+            }
+        }
     }
     
     @MainActor
-    func downloadImages(firstURL: URL?, secondURL: URL?, thirdURL: URL?) async  {
+    func downloadImagesStatically(firstURL: String?, secondURL: String?, thirdURL: String?) async {
         Task {
-            async let firsImageData = getImageData(url: firstURL)
-            async let secondImageData = getImageData(url: secondURL)
-            async let thirdImageData = getImageData(url: thirdURL)
+            async let firstImageData = getImageData(urlString: firstURL)
+            async let secondImageData = getImageData(urlString: secondURL)
+            async let thirdImageData = getImageData(urlString: thirdURL)
             
-            imageDataList = try await [
-                ContentViewModel.IdentifiableImageData(imageData: firsImageData, url: firstURL),
-                ContentViewModel.IdentifiableImageData(imageData: secondImageData, url: secondURL),
-                ContentViewModel.IdentifiableImageData(imageData: thirdImageData, url: thirdURL)
-            ]
+            imageDataList = try await [firstImageData, secondImageData, thirdImageData]
         }
     }
 }

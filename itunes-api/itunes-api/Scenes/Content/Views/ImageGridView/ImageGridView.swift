@@ -1,5 +1,5 @@
 //
-//  AsyncImageGridView.swift
+//  ImageGridView.swift
 //  itunes-api
 //
 //  Created by Cem Ege on 7.09.2023.
@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct AsyncImageGridView: View {
+struct ImageGridView: View {
     
     // MARK: - Properties
     var title: String
-    var dataList: [ContentViewModel.IdentifiableImageData] = []
+    var dataList: [ContentViewModel.IdentifiableDataSourceModel] = []
     
     // MARK: - Body
     var body: some View {
@@ -21,7 +21,7 @@ struct AsyncImageGridView: View {
             
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]) {
                 ForEach(dataList) { data in
-                    AsyncImage(url: data.url)
+                    Image(data: data.imageData ?? Data())
                         .aspectRatio(contentMode: .fit)
                         .frame(width: UIScreen.width / 3 - 52, height: UIScreen.width / 3 - 52)
                         .cornerRadius(8)
@@ -38,8 +38,8 @@ struct AsyncImageGridView: View {
     }
 }
 
-struct AsyncImageGridView_Previews: PreviewProvider {
+struct ImageGridView_Previews: PreviewProvider {
     static var previews: some View {
-        AsyncImageGridView(title: "LOW", dataList: [])
+        ImageGridView(title: "LOW QUALITY", dataList: [])
     }
 }

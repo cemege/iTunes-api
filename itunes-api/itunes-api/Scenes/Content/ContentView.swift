@@ -27,19 +27,20 @@ struct ContentView: View {
                         Divider()
                         
                         if !viewModel.lowSizeImageData.isEmpty {
-                            AsyncImageGridView(title: "LOW Quality", dataList: viewModel.lowSizeImageData)
+//                            AsyncImageGridView(title: "LOW Quality", dataList: viewModel.lowSizeImageData)
+                            SectionView(title: "LOW Quality", dataList: viewModel.lowSizeImageData)
                         }
 
                         if !viewModel.midSizeImageData.isEmpty {
-                            AsyncImageGridView(title: "MID Quality", dataList: viewModel.midSizeImageData)
+                            SectionView(title: "MID Quality", dataList: viewModel.midSizeImageData)
                         }
 
                         if !viewModel.highSizeImageData.isEmpty {
-                            AsyncImageGridView(title: "HIGH Quality", dataList: viewModel.highSizeImageData)
+                            SectionView(title: "HIGH Quality", dataList: viewModel.highSizeImageData)
                         }
 
                         if !viewModel.giganticSizeImageData.isEmpty {
-                            AsyncImageGridView(title: "GIGANTIC Quality", dataList: viewModel.giganticSizeImageData)
+                            SectionView(title: "GIGANTIC Quality", dataList: viewModel.giganticSizeImageData)
                         }
                     }
                 }
